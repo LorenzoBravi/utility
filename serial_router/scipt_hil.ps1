@@ -29,12 +29,15 @@ public class MouseKeyboard
         keybd_event(VK_NUMLOCK, 0, KEYEVENTF_KEYUP, 0);
     }
 
-    public static void PressAltTab()
+    public static void PressAltTab(int tabCount)
     {
-        keybd_event(VK_MENU, 0, KEYEVENTF_KEYDOWN, 0);
-        keybd_event(VK_TAB, 0, KEYEVENTF_KEYDOWN, 0);
-        keybd_event(VK_TAB, 0, KEYEVENTF_KEYUP, 0);
-        keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);
+        keybd_event(VK_MENU, 0, KEYEVENTF_KEYDOWN, 0); // Press Alt key down
+        for (int i = 0; i < tabCount; i++)
+        {
+            keybd_event(VK_TAB, 0, KEYEVENTF_KEYDOWN, 0); // Press Tab key down
+            keybd_event(VK_TAB, 0, KEYEVENTF_KEYUP, 0); // Release Tab key
+        }
+        keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0); // Release Alt key
     }
 }
 "@
@@ -60,11 +63,12 @@ while ($true) {
     # Press the Num Lock key
     [MouseKeyboard]::PressNumLock()
 
-    # Print the action of pressing Alt+Tab
-    Write-Host "Pressing Alt+Tab"
+    # Generate a random number of Tab presses between 1 and 5
+    $randomTabCount = $random.Next(1, 6)
+    Write-Host "Pressing Alt+Tab $randomTabCount times"
 
-    # Press Alt+Tab
-    [MouseKeyboard]::PressAltTab()
+    # Press Alt+Tab random number of times
+    [MouseKeyboard]::PressAltTab($randomTabCount)
 
     # Generate a random wait time between 1 and 5 seconds
     $randomWaitTime = $random.Next(1, 6)
